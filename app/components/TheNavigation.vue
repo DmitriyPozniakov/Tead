@@ -75,7 +75,7 @@ const links = [
           </li>
         </ul>
 
-        <div class="mt-auto flex flex-col gap-3">
+        <div class="mt-auto flex gap-3">
           <BaseButton 
             text="регистрация" 
             bg="bg-[#57E1FF]" 
