@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
+import { onMounted, ref, onBeforeUnmount } from 'vue'
 
 const deals = [
     { title: 'NEAR/USDT', subTitle: 'SPOT · 1 мин. назад', profit: '58.6206', targetNum: '4', date: '06.10.2022' },
@@ -11,7 +7,7 @@ const deals = [
     { title: 'ETH/USDT', subTitle: 'SPOT · 3 мин. назад', profit: '3200', targetNum: '3', date: '06.10.2022' },
     { title: 'XRP/USDT', subTitle: 'SPOT · 4 мин. назад', profit: '1.05', targetNum: '5', date: '06.10.2022' },
     { title: 'ADA/USDT', subTitle: 'SPOT · 5 мин. назад', profit: '2.15', targetNum: '6', date: '06.10.2022' },
-     { title: 'NEAR/USDT', subTitle: 'SPOT · 1 мин. назад', profit: '58.6206', targetNum: '4', date: '06.10.2022' },
+    { title: 'NEAR/USDT', subTitle: 'SPOT · 1 мин. назад', profit: '58.6206', targetNum: '4', date: '06.10.2022' },
     { title: 'BTC/USDT', subTitle: 'SPOT · 2 мин. назад', profit: '48000', targetNum: '2', date: '06.10.2022' },
     { title: 'ETH/USDT', subTitle: 'SPOT · 3 мин. назад', profit: '3200', targetNum: '3', date: '06.10.2022' },
     { title: 'XRP/USDT', subTitle: 'SPOT · 4 мин. назад', profit: '1.05', targetNum: '5', date: '06.10.2022' },
@@ -21,7 +17,12 @@ const deals = [
 const hScroll = ref<HTMLElement | null>(null)
 const wrapper = ref<HTMLElement | null>(null)
 
-onMounted(() => {
+onMounted(async () => {
+    const { gsap } = await import('gsap')
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+    
+    gsap.registerPlugin(ScrollTrigger)
+
     const el = hScroll.value
     const wrap = wrapper.value
     if (!el || !wrap) return
@@ -46,6 +47,11 @@ onMounted(() => {
         }
     })
 })
+
+onBeforeUnmount(async () => {
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+})
 </script>
 
 <template>
@@ -63,7 +69,6 @@ onMounted(() => {
             <BaseCard v-for="(deal, index) in deals" :key="index" v-bind="deal" />
         </div>
 
-        <!-- Разделители -->
         <img class="absolute -bottom-2 left-0 hidden md:block" src="~/assets/icons/whiteSeparator.svg" alt="">
         <img class="absolute -bottom-10 left-0 block md:hidden" src="~/assets/icons/whiteSeparatorMob.svg" alt="">
     </section>

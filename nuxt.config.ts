@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     ],
   },
    modules: ['shadcn-nuxt'],
+   build: {
+    transpile: ['gsap']
+  },
   shadcn: {
     /**
      * Prefix for all the imported component
